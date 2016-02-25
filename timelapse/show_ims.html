@@ -1,0 +1,110 @@
+{% load staticfiles %}
+</script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Timelapse</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="{% static "css/timelapse_style.css"%}">
+  </head>
+  <body>
+    <div class="container">
+      <div class="starter-template">
+        <h1>Timelapse Slide Show</h1>
+        {% for im in im_list %}
+          <div id="carousel-template{{forloop.counter}}" class="carousel slide" data-ride="carousel" data-interval="false">
+            <!--Indicators-->
+              <ol class="carousel-indicators">
+                {% for i in im %}
+                  <li data-target="#carousel-template{{forloop.parentloop.counter}}" data-slide-to="template{{forloop.counter}}"></li>
+                {% endfor %}
+              </ol>
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner" role="listbox">
+                {% for i in im %}
+                  {% if forloop.first %}  
+                    <div class="item active">
+                  {% else %}
+                    <div class="item">
+                  {% endif %}
+                    <!<canvas id="im_{{forloop.parentloop.counter}}_{{forloop.counter}}" width="860" height="364"></canvas>>
+                      <img src="{{i.im}}" alt="{{i.date}}">
+                      <script type="text/javascript">
+                      /*
+                          //show streetview image
+                          var canvas = document.getElementById("im_{{forloop.parentloop.counter}}_{{forloop.counter}}");
+                          var context = canvas.getContext('2d');
+                          var img = new Image;
+
+                          img.onload = function() {
+                          context.drawImage(img, 0, 0);
+
+                          {% for bbox in i.bboxes %} 
+                              var bbox_x1 = {{ bbox.x1 }}; 
+                              var bbox_width = {{bbox.x2}}-{{bbox.x1}};
+                              var bbox_y1 = {{bbox.y1}};
+                              var bbox_height = {{bbox.y2}}-{{bbox.y1}};
+
+                              if ({{bbox.dscore}} > -2.3){
+                                context.strokeStyle = '#00FF00';
+                              }else{
+                                context.strokeStyle = '#FF0000';
+                              } 
+                              context.lineWidth = 5;
+                              context.strokeRect(bbox_x1, bbox_y1, bbox_width, bbox_height);
+                              context.stroke();
+                              context.font = "bold 12px Arial";
+                              context.fillStyle = 'magenta';
+                              context.fillText("{{bbox.group_id}}", bbox_x1, bbox_y1);
+                              context.fillStyle = 'yellow';
+                              context.fillText("{{bbox.pscore}}", bbox_x1, bbox_y1+10);
+                          {% endfor %}
+                        }
+                        img.src = "{{i.im}}";
+                        //img.src='http://imagenet.stanford.edu/geo/gsv_100k_unwarp/im_25.916814_-97.428000_180.000000_0.000000.jpg';
+                        */
+                      </script>
+                    <div class="carousel-caption">
+                      <h3>"{{i.date}}"</h3>
+                    </div>
+                </div>
+                </br>
+                {% endfor %}
+              </div>
+              <!--Controls-->
+              <a class="left carousel-control" href="#carousel-template{{forloop.counter}}" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden=true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="right carousel-control" href="#carousel-template{{forloop.counter}}" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden=true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div><!--template-->
+    </div><!--container-->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  </body>
+</html>
+

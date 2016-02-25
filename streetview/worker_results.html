@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="{% static "js/js_functions.js"%}"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+
+<script>
+  $( document ).ready(function() {
+    $('.button').button();
+  })
+</script>
+<div id="all">
+<table>
+<tr class="bold_word" "table">
+  <td>User Name</td>
+  <td>Number of Images</td>
+  <td>Number of Exact Matches</td>
+</tr>
+{% for worker in workers %}
+  <tr>
+    <td><a class="button" href="/streetview/streetview/summary/{{worker.name}}">{{worker.name}}</a></td>
+    <td class="bold_word">{{worker.total_ims}}</td>
+    <td class="bold_word">{{worker.exact_matches}}</td>
+    {#<td class="bold_word">{{worker.ave_speed}}</td>#}
+  </tr>
+{% endfor %}
+</table>
+</div><!--all-->
+
+

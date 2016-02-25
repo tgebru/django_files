@@ -1,0 +1,53 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+<script>
+  $( document ).ready(function() {
+    //show streetview image
+   {% for im in images %}
+       var canvas_{{forloop.counter}} = document.getElementById("img_div_{{forloop.counter}}");
+        var img_{{forloop.counter}} = new Image;
+        var context_{{forloop.counter}} = canvas_{{forloop.counter}}.getContext('2d');
+        img_{{forloop.counter}}.onload = function() {
+          var bbox_x1 = {{ im.bbox.pleft }} * ({{ im.img.oriwidth }} / {{ im.bbox.width }});
+          var bbox_width = ({{ im.bbox.pright }} - {{ im.bbox.pleft }} + 1) * ({{ im.img.oriwidth }} / {{ im.bbox.width }});
+          var bbox_y1 = {{ im.bbox.ptop }} * ({{ im.img.oriheight }}/{{ im.bbox.height }});
+          var bbox_height = ({{ im.bbox.pbottom }} - {{ im.bbox.ptop }} + 1) * ({{ im.img.oriheight }} / {{ im.bbox.height }});
+        
+          var sourceX= Math.max(0,bbox_x1-10);
+          var sourceY= Math.max(0,bbox_y1-10);
+          var sourceWidth=bbox_width+10;
+          var sourceHeight=bbox_height+10;
+
+          var aspect_ratio=sourceHeight/sourceWidth;
+          var destWidth = Math.min(sourceWidth, canvas_{{forloop.counter}}.width)
+          var destHeight=Math.min(aspect_ratio*destWidth,canvas_{{forloop.counter}}.height);
+
+          var destX=10;
+          var destY=10;
+          //draw bounding box
+          context_{{forloop.counter}}.drawImage(img_{{forloop.counter}}, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+      }
+      img_{{forloop.counter}}.src = '{{im.img.url}}';
+     {% endfor %}
+})
+</script>
+  <div id="all">
+  <h1>{{username}}</h1>
+  <div id="top">
+  <h1 class="bold_word">Group {{group_id}}: {{group_name.group_name}}</h1>
+  {% for im in examples %}
+     <img src="{% static "img/carlist/" %}{{im}}" class="img_div" alt="image" width="auto" height="400">
+  {% endfor %}
+  </br>
+  </br>
+  </div><!--top-->
+  <div id="bottom">
+  <h1 class="bold_word">Class positives</h1>
+  {% for im in images %}
+     <canvas id="img_div_{{forloop.counter}}" height="300" class=img_div></canvas>
+  {% endfor %}
+  </bottom><!--bottom-->
+  <div id="all">

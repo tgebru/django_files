@@ -1,0 +1,120 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="{% static "js/js_functions.js"%}"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+<script>
+  $( document ).ready(function() {
+    //show streetview image
+   
+    var canvas = document.getElementById('img_div');
+    var context = canvas.getContext('2d');
+    var img = new Image;
+ 
+    img.onload = function() {
+        var bbox_x1 = {{ bbox.pleft }} * ({{ image.oriwidth }} / {{ bbox.width }});
+        var bbox_width = ({{ bbox.pright }} - {{ bbox.pleft }} + 1) * ({{ image.oriwidth }} / {{ bbox.width }});
+        var bbox_y1 = {{ bbox.ptop }} * ({{ image.oriheight }}/{{ bbox.height }});
+        var bbox_height = ({{ bbox.pbottom }} - {{ bbox.ptop }} + 1) * ({{ image.oriheight }} / {{ bbox.height }});
+        
+        //uncomment out if I want to see entire image
+        //w bounding boxes
+    /*    
+        context.drawImage(img, 0, 0);
+        context.strokeStyle = '#00FF00';
+        context.lineWidth = 5;
+        context.strokeRect(bbox_x1, bbox_y1, bbox_width, bbox_height);
+        context.stroke();
+     */   
+
+        var sourceX= Math.max(0,bbox_x1-10);
+        var sourceY= Math.max(0,bbox_y1-10);
+        var sourceWidth=bbox_width+10;
+        var sourceHeight=bbox_height+10;
+    
+        var aspect_ratio=sourceHeight/sourceWidth;
+        var destWidth = Math.min(sourceWidth, canvas.width)
+        var destHeight=Math.min(aspect_ratio*destWidth,canvas.height);
+
+        console.log("img_div width" +$("#img_div").width())
+        console.log("source width" +sourceWidth)
+        console.log("dst width" +destWidth)
+        console.log("img width" +img.width)
+        console.log("img height" +img.height)
+        console.log("canvas width" +$("canvas").width())
+        console.log("canvas2 width" +canvas.width)
+        console.log("left width" +$("#left").width())
+     
+    
+        var destX=10;
+        var destY=10;
+
+        //draw bounding box
+        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+
+        var height=destHeight+'px';
+        //$("#img_div").height(height);
+        //$("canvas").height(height);
+      }
+        img.src = '{{image.url}}';
+
+    //Auto complete combobox
+    $(function() {
+      var make_names = [];
+      $('.make_names').each(function() {
+        make_names.push($(this).val());
+      });
+      $("#makes").autocomplete({
+          minLength: 0,
+          source: make_names,
+       }).on("focus",function (){
+          $(this).autocomplete("search","");
+       })
+       .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+          var make=item.label.split(" ").join('_');
+          return $( "<li>" )
+          .append( '<a href="/streetview/streetview/'+make+'">'+item.label+"</a>" )
+          .appendTo( ul );
+        };
+ 
+   $(function() {
+      $( "#menu" ).menu();
+   });
+    $('.button').button();
+  });
+    $('input').addClass("ui-corner-all");
+})
+</script>
+<style>
+  .ui-menu { width: 300px; }
+  .make_menu {width:200px;}
+</style>
+{% if user.is_authenticated %} 
+  <div id="logout">
+  <a class="button logout" href="/streetview/streetview/logout_first/">Logout</a>
+  </div><!--logout-->
+  <div id="all">
+  <div id="left">
+  <canvas id="img_div" height="800"></canvas>
+  {#<canvas id="img_div" width="{{image.oriwidth}}" height="{{image.oriheight}}"></canvas>#}
+  </div><!--left-->
+  <div id="right_long">
+  <h1>Please enter the make of the car or select <span><a class="button unknown" href="/streetview/streetview/bbox_id/{{bbox.bbox_id}}">Unknown</a></span> </h1>
+  <div class="ui-widget">
+    <label for="makes">Make: </label>
+    {% for make in make_model_dicts %}
+      <input type="hidden" id="template{{forloop.counter}}" class="make_names" name="template{{forloop.counter}}" value="{{make.make}}"/>
+    {% endfor %}
+      <input id="makes">
+  </div>
+ </div><!--all-->
+{% else %}
+  <div id="all">
+  <div id="left">
+  <h1>Please login or register</h1>
+  <a class="button login" href="/streetview/streetview/login/">Login</a>
+  <a class="button login" href="/streetview/streetview/register/">Register</a>
+  </div><!--left-->
+</div><!--all-->
+{% endif %}

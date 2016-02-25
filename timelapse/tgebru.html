@@ -1,0 +1,98 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Timnit Gebru</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="{% static "css/tgebru_style.css"%}">
+  </head>
+  <body>
+    <div class="container">
+      <div class="starter-template">
+        <br>
+        <br>
+        <div id="header_info">
+          <div id="header_img">
+            <img class="img-circle" src="http://imagenet.stanford.edu/internal/me_dare_cropped.jpg" alt="">
+          </div>
+          <div id="bio">
+            <div id="header_stuff">
+              <h1 class="headings">Timnit Gebru</h1>
+              <p><span class="email">tgebru@cs.stanford.edu</span></p>
+              <br>
+            </div>
+            <p class="lead">I am a PhD student in the Stanford Artificial Intelligence Laboratory, studying computer vision under Fei-Fei Li. My main research interest lies in data mining large scale  publicly available images to gain sociological insight. Stay tuned for related news coming soon. Prior to joining Fei-Fei's lab I worked at Apple designing circuits and signal processing algorithms for various Apple products including the first ipad.</p>
+          </div>
+        </div><!--header_info-->
+        <br>
+        <br>
+        <div id="rest">
+          <h1 class="headings">Publications</h1>
+          <div class="publication">
+            <br>
+            <br>
+            <div class="col-xs-5">
+              <img class="thumb_img col-xs-r" src="http://imagenet.stanford.edu/internal/jkrause.png" alt="">
+            </div>
+            <div class="col-xs-5 pub">
+              <h4>Visual Census: Using Cars to Study People and Society</h3>
+              <p class="lead authors">Timnit Gebru, Jonathan Krause, Yilun Wang, Duyun Chen,</p> 
+              <p class="lead authors">Jia Deng, Li Fei-Fei</p>
+              <p class="lead venue">CVPR BigVision 2015<p>
+              <p><a href="city/nyc" class="btn btn-sm link">PDF</a></p>
+            </div>
+          </div>
+
+          <div class="publication">
+            <div class="col-xs-5">
+              <img class="thumb_img col-xs-r" src="http://imagenet.stanford.edu/internal/jkrause.png" alt="">
+            </div>
+            <div class="col-xs-5 pub">
+              <h4> Learning Features and Parts for Fine-Grained Recognition</h3>
+              <p class="lead authors">Jonathan Krause, Timnit Gebru, Jia Deng, Li-Jia Li, Li Fei-Fei</p>
+              <p class="lead venue">ICPR 2014<p>
+              <p><a href="city/nyc" class="btn btn-sm link">PDF</a></p>
+            </div>
+          </div>
+
+          <div class="publication">
+            <div class="col-xs-5">
+              <img class="thumb_img col-xs-r" src="http://imagenet.stanford.edu/internal/jkrause.png" alt="">
+            </div>
+            <div class="col-xs-5 pub">
+              <h4>Drivers of Variability in Energy Consumption</h3>
+              <p class="lead authors">Adrian Albert, Timnit Gebru, J Ku, J Kwac, Jure Leskovec,</p>
+              <p class="lead authors">Ram Rajagopal</p>
+              <p class="lead venue">ECML PKDD 2013<p>
+              <p><a href="city/nyc" class="btn btn-sm link">PDF</a></p>
+            </div>
+          </div>
+          <br>
+          <br>
+          <h1 class="headings">Invited Talks</h1>
+          <br>
+          <h3>Predicting Demographics Using 50 Million Images</h3>
+          <p class="lead venue">CVPR LSVisCom 2015<p>
+          <p><a href="city/nyc" class="btn btn-sm link">Slides coming soon...</a></p>
+          </div><!--rest-->
+      </div><!--template-->
+    </div><!--container-->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

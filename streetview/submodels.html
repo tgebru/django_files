@@ -1,0 +1,75 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="{% static "js/img_preview.js"%}"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+<script>
+  $( document ).ready(function() {
+    //show streetview image
+    var canvas = document.getElementById('img_div');
+    var context = canvas.getContext('2d');
+    var img = new Image;
+    img.onload = function() {
+        var bbox_x1 = {{ bbox.pleft }} * ({{ image.oriwidth }} / {{ bbox.width }});
+        var bbox_width = ({{ bbox.pright }} - {{ bbox.pleft }} + 1) * ({{ image.oriwidth }} / {{ bbox.width }});
+        var bbox_y1 = {{ bbox.ptop }} * ({{ image.oriheight }}/{{ bbox.height }});
+        var bbox_height = ({{ bbox.pbottom }} - {{ bbox.ptop }} + 1) * ({{ image.oriheight }} / {{ bbox.height }});
+        
+        var sourceX= Math.max(0,bbox_x1-10);
+        var sourceY= Math.max(0,bbox_y1-10);
+        var sourceWidth=bbox_width+10;
+        var sourceHeight=bbox_height+10;
+
+        var aspect_ratio=sourceHeight/sourceWidth;
+        var destWidth = Math.min(sourceWidth, $("#img_div").width())
+        var destHeight=Math.min(aspect_ratio*destWidth,$("#img_div").height());
+        var destX=10;
+        var destY=10;
+        //draw bounding box
+        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+
+        var height=dstHeight+'px';
+        $("#img_div").height(height);
+      }
+    img.src = '{{image.url}}';
+
+   //menu
+   $(function() {
+      $( "#menu" ).menu();
+    });
+    //Back button
+    $('.button').button();
+    $('.back').click(function(){
+        parent.history.back();
+        return false;
+    });
+  });
+</script>
+<style>
+  .ui-menu { width: 300px; }
+  .make_menu {width:200px;}
+</style>
+<div id="all">
+  <div id="left">
+    <p>Make:<span class="bold_word">{{ make }}</span></br>If not correct go <span><a class="button back" href="#">Back</a></span><br> 
+    <div class="ui-widget photo ui-corner-all">
+    <canvas id="img_div" height="800"></canvas>
+    </div>
+  </div><!--left-->
+  <div id="right_long">
+    <p><span class="bold_word">Select the submodel</span></p></br>
+    <div class="ui-widget">
+        <ul id="menu" class="make_menu">
+          {% for submodel in submodels %}
+             <li><a href="/streetview/streetview/{{make}}/{{submodel.split|join:"_"}}/">{{submodel}}</a></li>
+          {% endfor %}
+        </ul>
+    <div id="buttons">
+      </br>
+      <a class="button back" href="#">Back</a>
+      <a class="button unknown" href="/streetview/streetview/{{make}}/unknown">Unknown</a>
+    </div><!--buttons-->
+    </div><!--ui-widget-->
+  </div><!--right_long-->
+</div><!--all-->

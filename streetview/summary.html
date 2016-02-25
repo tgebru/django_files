@@ -1,0 +1,42 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="{% static "js/js_functions.js"%}"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+
+<script>
+  $( document ).ready(function() {
+    $('.button').button();
+  })
+</script>
+<div id="all">
+<h1>Total images <span class="bold_word">{{total_ims}} </span></h1>
+</br>
+<h1>Exact matches <span class="bold_word">{{exact_matches}} </span><span><a class="button" href="/streetview/streetview/exact_matches/{{username}}">View Results</a></span></h1>
+</br>
+<h1>Make-submodel matches <span class="bold_word">{{make_submodel_matches}} </span><span><a class="button" href="/streetview/streetview/make_submodel_matches/{{username}}">View Results</a></span></h1>
+</br>
+<h1>Make only matches <span class="bold_word">{{make_only_matches}} </span>
+{% if make_only_matches > 0 %}
+  <span><a class="button" href="/streetview/streetview/make_only_matches/{{username}}">View Results</a></span></h1>
+{% endif %}
+</br>
+<h1>Submodel only matches <span class="bold_word">{{submodel_only_matches}}</span>
+{% if submodel_only_matches > 0 %}
+  <span><a class="button" href="/streetview/streetview/submodel_only_matches/{{username}}">View Results</a></span></h1>
+{% endif %}
+</br>
+<h1>Completely Unknown <span class="bold_word">{{unknown}}</span>
+{% if unknown > 0 %}
+  <span><a class="button" href="/streetview/streetview/results/unknown-unknown/{{username}}">View Results</a></span></h1>
+{% endif %}
+{% if show_worker == 1%}
+</br>
+</br>
+<a class="button" href="/streetview/streetview/exact_matches/">Class Results</a>
+  <a class="button" href="/streetview/streetview/worker_results/">Worker Results</a>
+{% endif %}
+</div><!--all-->
+
+

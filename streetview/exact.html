@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="{% static "js/js_functions.js"%}"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+
+<script>
+  $( document ).ready(function() {
+    $('.button').button();
+  })
+</script>
+<style>
+  .button {background: white; width:300px; text-align:left;}
+</style>
+<div id="all">
+<h1>{{username}}</h1>
+<table>
+<tr class="bold_word">
+  <td>Group ID</td>
+  <td>Number of matches</td>
+</tr>
+{% for match in matches %}
+  <tr>
+    <td><a class="button" href="/streetview/streetview/exact_match/{{match.group_id}}/{{username}}">{{match.group_id}} {{match.group_name.group_name}}</a></td>
+    <td class="bold_word">{{match.count}}</td>
+  </tr>
+{% endfor %}
+</table>
+</div><!--all-->
+
+

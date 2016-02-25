@@ -1,0 +1,22 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="{% static "js/js_functions.js"%}"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+<script>
+  $( document ).ready(function() {
+    $('.button').button();
+    $('input').addClass("ui-corner-all");
+  })
+</script>
+<div id="all">
+{% block content %}
+  <h1 class="bold_word">Create an account</h1>
+  <form action="" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" class="button" value="Create the account">
+  </form>
+{% endblock %}
+</div><!--all-->

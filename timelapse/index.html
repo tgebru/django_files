@@ -1,0 +1,63 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Timelapse</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="{% static "css/timelapse_style.css"%}">
+  </head>
+  <body>
+    <div class="container">
+      <div class="starter-template">
+        <h1>Timelapse</h1>
+        <p class="lead">Browse timelapse samples.</p>
+        <div class="btn-group-vertical">
+          <a href="city/nyc" class="btn btn-primary">New York</a>
+          </br>
+          <a href="city/detroit" class="btn btn-primary">Detroit</a>
+          </br>
+          <a href="predictions" class="btn btn-primary">NYC Predictions</a>
+          </br>
+          <a href="stats" class="btn btn-primary">NYC Image Stats</a>
+          </br>
+          <a href="correlations/DISTRICT" class="btn btn-primary">Feature/Census Correlations DISTRICT</a>
+          </br>
+          <a href="correlations/ZIPCODE" class="btn btn-primary">Feature/Census Correlations ZIPCODE</a>
+          </br>
+          <a href="car_atts/cars/DISTRICT" class="btn btn-primary">District Car attributes over time</a>
+          </br>
+          <a href="car_atts/cars/ZIPCODE" class="btn btn-primary">Zipcode Car attributes over time</a>
+          </br>
+          <a href="car_atts/census/ZIPCODE" class="btn btn-primary">Zipcode Census attributes over time</a>
+          </br>
+          <a href="housing/ZIPCODE" class="btn btn-primary">Zipcode Housing attributes over time</a>
+          </br>
+          <a href="city/siggraph" class="btn btn-primary">Siggraph</a>
+          </br>
+          <a href="pascal_experiments" class="btn btn-primary">Pascal Experiments</a>
+          <a href="siggraph_experiments" class="btn btn-primary">Siggraph Experiments</a>
+          </br>
+          <a href="pascal_experiments" class="btn btn-primary">Pascal Experiments</a>
+          </br>
+        </div>
+      </div><!--template-->
+    </div><!--container-->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

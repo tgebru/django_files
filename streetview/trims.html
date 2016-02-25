@@ -1,0 +1,160 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+<script>
+  //global variable group_id
+  var group_id='';
+  //Slideshow
+  $("#slideshow > div:gt(0)").hide();
+  var index = 1;
+  var maxindex = $('#slideshow > div').length;
+
+  setInterval(function () {
+      $('#slideshow > div:first')
+          .fadeOut(1000)
+          .next()
+          .fadeIn(1000)
+          .end()
+          .appendTo('#slideshow');
+      $('ul li').removeClass('active');
+      $('ul li:eq(' + index + ')').addClass('active');
+      index = index < maxindex - 1 ? index + 1 : 0;
+  }, 3000);
+
+  for (var i = 0; i < maxindex; i++) {
+      $('ul').append('<li class="' + (i == 0 ? 'active' : '') + '"></li>');
+  }
+
+   $(function() {
+      $("#selectable").selectable();
+  });
+
+   $(function() {
+    $( document ).tooltip({
+      items: ".ui-widget-content",
+      position: { my: "left top", at: "left bottom",of:$("#right-bottom"),collision:"fit",within:$("#right-bottom")},
+      content: function() {
+        var element = $( this );
+        var group_id=element.attr('id');
+        if ( element.is( ".ui-widget-content" ) ) {
+           var images='';
+           $('.'+group_id).each(function(index,element){
+               var im=$(this).val();
+               images =images+ '<div id="floated_image">'+
+               '<img src="{% static "img/carlist/" %}'+im+'" "height=200" "width=auto"'+'alt="My image"/' 
+               +'</div><!--floated_image-->';
+               return index<3; 
+           });
+        
+         return images
+        }
+      }
+    });
+  });
+
+  $( document ).ready(function() {
+    //show streetview image
+    var canvas = document.getElementById('img_div');
+    var context = canvas.getContext('2d');
+    var img = new Image;
+    img.onload = function() {
+        var bbox_x1 = {{ bbox.pleft }} * ({{ image.oriwidth }} / {{ bbox.width }});
+        var bbox_width = ({{ bbox.pright }} - {{ bbox.pleft }} + 1) * ({{ image.oriwidth }} / {{ bbox.width }});
+        var bbox_y1 = {{ bbox.ptop }} * ({{ image.oriheight }}/{{ bbox.height }});
+        var bbox_height = ({{ bbox.pbottom }} - {{ bbox.ptop }} + 1) * ({{ image.oriheight }} / {{ bbox.height }});
+        
+        var sourceX= Math.max(0,bbox_x1-10);
+        var sourceY= Math.max(0,bbox_y1-10);
+        var sourceWidth=bbox_width+20;
+        var sourceHeight=bbox_height+20;
+        var destWidth = sourceWidth;
+        var destHeight =sourceHeight;
+        //var destX = canvas.width / 2 - destWidth / 2;
+        //var destY = canvas.height / 2 - destHeight / 2;
+        var destX=10;
+        var destY=10;
+        //draw bounding box
+        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+    }
+    img.src = '{{image.url}}';
+
+   //menu
+   $(function() {
+      $( "#menu" ).menu();
+    });
+
+    //Back button
+    $('.button').button();
+ 
+    $('.back').click(function(){
+        parent.history.back();
+        return false;
+    });
+
+    //Submit button
+    $('.submit').click(function(){
+      if (group_id==''){
+        alert('Please select a group or the unknown button');
+      }else{
+        var ind=group_id.indexOf("_")+1;
+        var gid=group_id.substring(ind);
+        if (confirm('Are you sure you want to submit your selection?')){
+          document.location.href='/streetview/submit/'+gid;
+        }
+      }
+    });
+
+    //What to do when selecting a trim/year
+    $( "#selectable" ).on( "selectableselected", function( event, ui ) {
+      group_id=$('#selectable .ui-selected').attr('id');
+      alert("Id="+id);
+    });
+  });
+</script>
+<style>
+  .ui-tooltip {
+    max-width: 650px;
+    max-height:420px;;
+    padding:0;
+  }
+
+  /* grid */
+  #feedback { font-size: 1.4em; }
+  #selectable .ui-selecting { background: #FECA40; }
+  #selectable .ui-selected { background: #F39814; color: white; }
+  #selectable { list-style-type: none; margin: 0; padding: 0; width: auto; }
+  #selectable li { margin: 3px; padding: 1px; float: left; width: 110px; height: 80px; font-size: 1em; text-align: center;overflow:hidden}
+}
+</style>
+<div id="all">
+<div id="left">
+<p>Make:<span class="bold_word">{{ make }}</span></br>Model:<span class="bold_word">{{ model }}</span> </br>If not correct go <span><a class="button back" href="#">Back</a></span><br> Select the trim/year (hover across tab choices to see example mages)</br></br> Click on a tab to select it</br>Click <span><a class="button submit" href="#">Submit</a></span> when you are sure of your answer</p></br>Click <span><a class="button unknown" href="/streetview/bbox_id/{{bbox.bbox_id}}">UNKNOWN</a></span>if you don't know or see the car</p>
+
+<div class="ui-widget photo ui-corner-all">
+<canvas id="img_div"></canvas>
+<div id="buttons">
+</br>
+<a class="button back" href="#">Back</a>
+<a class="button submit" href="#">Submit</a>
+</div><!--buttons-->
+</div><!--ui-widget-->
+</div><!--left-->
+<div id="right_long">
+<div id="right-top">
+   <ul id="selectable" class="ui-corner-all">
+    {% for model in models %}
+        <li class="ui-widget-content" id="group_{{group.group_id}}"><a href="#">{{model.model_name}}</a></li></br>
+        {% for trim in model.trims %}
+            <li class="ui-widget-content" id="group_{{group.group_id}}"><a href="#">{{model.model_name}}</a></li></br>
+          {% for image in trim.images %}
+           <input type="hidden" id="group_images" class="group_{{group.group_id}}" name="template{{forloop.counter}}" value="{{image}}"/>
+          {% endfor %}
+        {% endfor %}
+    {% endfor %}
+    </ul>
+</div><!--right-top-->
+<div id="right-bottom"></div>
+</div><!--right_long-->
+</div><!--all-->

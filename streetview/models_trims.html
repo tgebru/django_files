@@ -1,0 +1,162 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+<script>
+
+  $( document ).ready(function() {
+    //show streetview image
+    var canvas = document.getElementById('img_div');
+    var context = canvas.getContext('2d');
+    var img = new Image;
+    img.onload = function() {
+        var bbox_x1 = {{ bbox.pleft }} * ({{ image.oriwidth }} / {{ bbox.width }});
+        var bbox_width = ({{ bbox.pright }} - {{ bbox.pleft }} + 1) * ({{ image.oriwidth }} / {{ bbox.width }});
+        var bbox_y1 = {{ bbox.ptop }} * ({{ image.oriheight }}/{{ bbox.height }});
+        var bbox_height = ({{ bbox.pbottom }} - {{ bbox.ptop }} + 1) * ({{ image.oriheight }} / {{ bbox.height }});
+        
+        var sourceX= Math.max(0,bbox_x1-10);
+        var sourceY= Math.max(0,bbox_y1-10);
+        var sourceWidth=bbox_width+10;
+        var sourceHeight=bbox_height+10;
+
+        var aspect_ratio=sourceHeight/sourceWidth;
+        var destWidth = Math.min(sourceWidth, $("#img_div").width())
+        var destHeight=Math.min(aspect_ratio*destWidth,$("#img_div").height());
+
+        var destX=10;
+        var destY=10;
+        //draw bounding box
+        context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+
+        //$("#img_div").css('height', destHeight);
+
+        console.log("img_div width" +$("#img_div").width())
+        console.log("source width" +sourceWidth)
+        console.log("dst width" +destWidth)
+        console.log("img width" +img.width)
+        console.log("img height" +img.height)
+        console.log("canvas width" +$("canvas").width())
+        console.log("canvas2 width" +canvas.width)
+        console.log("left width" +$("#left").width())
+        console.log("canvas heihgt" +canvas.height)
+        console.log("src height" +sourceHeight)
+        console.log("dst height" +destHeight)
+        console.log("left height" +$("#left").height())
+    }
+    img.src = '{{image.url}}';
+
+   //menu
+   $(function() {
+      $("#menu").menu({
+          select:function(event,ui){
+            ui.item.focus();
+            group_id=ui.item.attr('id');
+            submit_answer(ui.item.text());
+          }
+      });
+    });
+
+    function submit_answer(text_item){
+        text_item= text_item || '';
+        var ind=group_id.indexOf("_")+1;
+        var gid=group_id.substring(ind);
+        if (confirm('Are you sure you want to submit your selection ' +text_item+ ' '+gid+'?')){
+          document.location.href='/streetview/streetview/submit/'+gid;
+        }
+    }  
+
+    //Back button
+    $('.button').button();
+ 
+    $('.back').click(function(){
+        parent.history.back();
+        return false;
+    });
+
+    //Submit button
+    $('.submit').click(function(){
+      if (group_id==''){
+        alert('Please select a group or the unknown button');
+      }else{
+        submit_answer();
+      }
+    });
+
+    var group_id='';
+    //Slideshow
+    $("#slideshow > div:gt(0)").hide();
+    var index = 1;
+    var maxindex = $('#slideshow > div').length;
+
+    $(function() {
+        $("#selectable").selectable();
+    });
+
+     $(function() {
+      $( document ).tooltip({
+        items: ".trims",
+       
+        position: { my: "left top", at: "left top",of:$("#left_bottom"),collision:"fit",within:$("#left_bottom")},
+        
+        content: function() {
+          var element = $( this );
+          var group_id=element.attr('id');
+          if ( element.is( ".trims" ) ) {
+             var images='';
+             $('.'+group_id).each(function(index,element){
+                 var im=$(this).val();
+                 images =images+ '<div id="floated_image">'+
+                 '<img src="{% static "img/carlist/" %}'+im+'" "height=200" "width=auto"'+'alt="My image"/>' 
+                 +'</div><!--floated_image-->';
+                 return index<3; 
+             });
+           return images
+          }
+        }
+      });
+    });
+  });
+</script>
+<style>
+  .ui-menu { width: 300px; }
+  .make_menu {width:200px;}
+  .ui-tooltip {
+    max-width: 650px;
+    max-height:420px;;
+    padding:0;
+  }
+
+</style>
+<div id="all">
+<div id="left">
+<p>Make:<span class="bold_word">{{ make }}</span></br>Submodel:<span class="bold_word">{{ submodel }}</span> </br>If not correct go <span><a class="button back" href="#">Back</a></span><br></p>
+<canvas id="img_div" height="200px"></canvas>
+<div id="left_bottom"></br></div>
+</div><!--left-->
+<div id="right_long">
+<div id="right-top">
+  <p><span class="bold_word">Select the model and trim/year (hover across tab choices to see example mages) and click on a tab to make your selection</span></p></br>
+  <div id="buttons">
+  <a class="button back" href="#">Back</a>
+  <a class="button unknown" href="/streetview/streetview/bbox_id/{{bbox.bbox_id}}">Unknown</a>
+  </div><!--buttons-->
+  </br>
+  <ul id="menu" class="make_menu">
+    {% for model in models %}
+        <li><a href="#">{{model.model_name}}</a>
+        <ul> 
+          {% for trim in model.trims %}
+            <li class="trims" id="group_{{trim.group_id}}"><a href="#">{{trim.trim_name}}</a></li>
+             {% for image in trim.images %}
+               <input type="hidden" id="group_images" class="group_{{trim.group_id}}" name="template{{forloop.counter}}" value="{{image}}"/>
+             {% endfor %}
+          {% endfor %}
+        </ul></li>
+    {% endfor %}
+   </ul>
+</div><!--right-top-->
+<div id="right-bottom"></div>
+</div><!--right_long-->
+</div><!--all-->
