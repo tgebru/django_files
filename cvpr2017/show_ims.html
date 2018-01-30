@@ -1,0 +1,16 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+<div id="all">
+  {% for im_type,im_source in im_sources %}
+    <h1>{{im_type}}</h1>
+    {% for split,im_dicts in im_source %}
+       <h1>{{split}}</h1>
+       {% for im in im_dicts %}
+         <img src='http://{{im.url}}'>
+      {% endfor %}
+    {% endfor %}
+</div>
+  {% endfor %}

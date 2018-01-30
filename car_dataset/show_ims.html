@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+<script>
+  $( document ).ready(function() {
+    //show streetview image
+  {% for im_type,im_source in im_dicts %}
+    {% for url,bbox in im_source %}
+       var canvas_{{forloop.counter}} = document.getElementById("img_div_{{forloop.counter}}");
+        var img_{{forloop.counter}} = new Image;
+        var context_{{forloop.counter}} = canvas_{{forloop.counter}}.getContext('2d');
+        img_{{forloop.counter}}.onload = function() {
+          var sourceX= Math.max(0,{{bbox.x1}}-10);
+          var sourceY= Math.max(0,{{bbox.y1}}-10);
+          var sourceWidth={{bbox.x2}}-{{bbox.x1}}+10;
+          var sourceHeight={{bbox.y2}}-{{bbox.y1}}+10;
+
+          var aspect_ratio=sourceHeight/sourceWidth;
+          var destWidth = Math.min(sourceWidth, canvas_{{forloop.counter}}.width)
+          var destHeight=Math.min(aspect_ratio*destWidth,canvas_{{forloop.counter}}.height);
+
+          var destX=10;
+          var destY=10;
+          //draw bounding box
+          context_{{forloop.counter}}.drawImage(img_{{forloop.counter}}, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+      }
+      img_{{forloop.counter}}.src = 'http://{{url}}';
+   {% endfor %}
+ {% endfor %}
+})
+</script>
+
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+<div id="all">
+  {% for im_type,im_source in im_dicts %}
+    <h1>{{im_type}}</h1>
+     {% for url,bbox in im_source %}
+         <canvas id="img_div_{{forloop.counter}}" height="300" class=img_div></canvas>
+    {% endfor %}
+  {% endfor %}
+</div>

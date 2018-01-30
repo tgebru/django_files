@@ -1,3 +1,4 @@
+
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
@@ -17,16 +18,20 @@
     <link rel="stylesheet" href="{% static "css/timelapse_style.css"%}">
   </head>
   <body>
-    {% for im in img_list %}
-      <table class="table">
-        <tr>
-        <td>{{im}}</td>
-        </tr>
-        <tr>
-        <td>
-        <img src="http://imagenet.stanford.edu/internal/{{img_dir}}/{{im}}"  alt="{{im}}">
-    {% endfor %}
-        </td>
-      </table>
-</body>
+    <div class="container">
+      <div class="starter-template">
+        <p class="lead">Choose census attributes.</p>
+        <div class="btn-group-vertical">
+          {% for att in att_list %}
+            <a href="{{att}}" class="btn btn-primary">{{att}}</a>
+          </br>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
 </html>

@@ -20,17 +20,25 @@
     <div class="table-responsive">
       <table class="table">
         {% for train,test,year in img_list %}
-          <tr>
-          <td>{{train}}</td>
-          <td>{{test}}</td>
+          {% if show_baselines == 'yes' %}
+            <tr>
+            <td>{{train}}</td>
+            <td>{{test}}</td>
+            </tr>
+            <tr>
+            <td><img src="{{base_url}}/train_{{year}}/{{train}}"  alt="{{year}}/{{train}}"></td>
+            <!--<a href="{{year}}/{{train}}" class="btn btn-primary">{{year}}</a>-->
+            <!--<a href="{{year}}/{{test}}" class="btn btn-primary">{{year}}</a>-->
+            <td><img src="{{base_url}}/test_{{year}}/{{test}}"  alt="{{year}}/{{test}}"></td>
+            <td><img src="{{base_url}}/baseline_{{year}}/{{test}}"  alt="{{year}}/{{test}}"</td>
           </tr>
-          <tr>
-          <td><img src="http://imagenet.stanford.edu/internal/scatter/train_{{year}}/{{train}}"  alt="{{year}}/{{train}}"></td>
-          <!--<a href="{{year}}/{{train}}" class="btn btn-primary">{{year}}</a>-->
-          <!--<a href="{{year}}/{{test}}" class="btn btn-primary">{{year}}</a>-->
-          <td><img src="http://imagenet.stanford.edu/internal/scatter/test_{{year}}/{{test}}"  alt="{{year}}/{{test}}"></td>
-          <td><img src="http://imagenet.stanford.edu/internal/scatter/baseline_{{year}}/{{test}}"  alt="{{year}}/{{test}}"</td>
-          </tr>
+         {% endif %}
+         {% if show_baselines == 'no' %}
+         {% endif %}
+           </tr>
+            <td>{{train}}</td>
+            <td><img src="{{base_url}}/{{year}}/{{train}}"  alt="{{year}}/{{train}}"></td>
+           </tr>
         {% endfor %}
       </table>
     </div>

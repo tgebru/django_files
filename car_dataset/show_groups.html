@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+
+<script>
+  $( document ).ready(function() {
+    $('.button').button();
+  })
+</script>
+<style>
+  .button {background: white; width:300px; text-align:left;}
+</style>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Timnit Gebru</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="css/visual_style.css">
+</head>
+<div id="all">
+<h1 class="headings" >Select Trim/Year</h1>
+{% for group in groups %}
+  <a class="button" href="{{group.group_id}}">{{group.info}}</a>
+{% endfor %}
+</div><!--all-->
+
+

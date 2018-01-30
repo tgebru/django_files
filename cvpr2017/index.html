@@ -1,0 +1,21 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="{% static "css/style.css"%}">
+
+<script>
+  $( document ).ready(function() {
+    $('.button').button();
+  })
+</script>
+<style>
+  .button {background: white; width:300px; text-align:left;}
+</style>
+<div id="all">
+{% for group_id in group_ids %}
+  <a class="button" href="{{group_id}}">{{group_id}}</a>
+{% endfor %}
+</div><!--all-->
+
+
