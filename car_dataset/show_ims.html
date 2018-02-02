@@ -37,7 +37,8 @@
   {% for im_type,im_source in im_dicts %}
     <h1>{{im_type}}</h1>
      {% for url,bbox in im_source %}
-         <canvas id="img_div_{{forloop.counter}}" height="300" class=img_div></canvas>
+         <!--<canvas id="img_div_{{forloop.counter}}" height="300" class=img_div></canvas>--!>
+         <img src="http://{{url}}" alt="Smiley face" height="42" width="42">
     {% endfor %}
   {% endfor %}
 </div>
